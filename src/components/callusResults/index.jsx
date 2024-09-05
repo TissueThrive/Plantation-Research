@@ -18,8 +18,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import moment from "moment";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import image4 from "../../assets/images/placeholder.png";
-import image1 from "../../assets/images/back.jpeg";
+import image4 from "../../assets/images/image_icon.jpeg";
 import { db } from "../../util/firebaseConfig";
 
 const styleModal = {
@@ -36,7 +35,7 @@ const styleModal = {
   borderRadius: 5,
 };
 
-function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL }) {
+function CallusResults({ downloadInputURL, callusID, file }) {
   const [predictedShape, setPredictedShape] = useState("N/A");
   const [predictedColor, setPredictedColor] = useState("N/A");
   const [predictedArea, setPredictedArea] = useState("N/A");
@@ -406,7 +405,7 @@ function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL })
           >
             <CardMedia
               component="img"
-              image={processedShapeImageUrl ? processedShapeImageUrl : image4}
+              image={downloadInputURL ? downloadInputURL : image4}
               alt={`Step 01`}
               sx={{
                 width: { xs: "100%", sm: 200 },
@@ -498,7 +497,7 @@ function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL })
                     fontFamily: "Poppins",
                     backgroundColor: "#33B864",
                     "&:hover": {
-                      backgroundColor: "#33B864",
+                      backgroundColor: "darkgreen",
                       "@media (hover: none)": {
                         backgroundColor: "#33B864",
                       },
@@ -524,7 +523,7 @@ function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL })
           >
             <CardMedia
               component="img"
-              image={processedColorImageUrl ? processedColorImageUrl : image4}
+              image={downloadInputURL ? downloadInputURL : image4}
               alt={`Step 02`}
               sx={{
                 width: { xs: "100%", sm: 200 },
@@ -594,7 +593,7 @@ function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL })
                     fontFamily: "Poppins",
                     backgroundColor: "#33B864",
                     "&:hover": {
-                      backgroundColor: "#33B864",
+                      backgroundColor: "darkgreen",
                       "@media (hover: none)": {
                         backgroundColor: "#33B864",
                       },
@@ -619,7 +618,7 @@ function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL })
           >
             <CardMedia
               component="img"
-              image={processedAreaImageUrl ? processedAreaImageUrl : image4}
+              image={downloadInputURL ? downloadInputURL : image4}
               alt={`Step 03`}
               sx={{
                 width: { xs: "100%", sm: 200 },
@@ -690,7 +689,7 @@ function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL })
                     fontFamily: "Poppins",
                     backgroundColor: "#33B864",
                     "&:hover": {
-                      backgroundColor: "#33B864",
+                      backgroundColor: "darkgreen",
                       "@media (hover: none)": {
                         backgroundColor: "#33B864",
                       },
@@ -709,18 +708,18 @@ function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL })
           <Card
             sx={{
               padding: 2,
-              flexDirection: "column",
+
+              flexDirection: { xs: "column", sm: "row" }, // Stack content vertically on small screens
               alignItems: "center",
-              justifyContent: "center",
-              gap: 1,
-              display: 'flex',
+              justifyContent: "space-between",
+              gap: 1, // Space between text and image
             }}
           >
             <Box
               sx={{
                 flex: 1,
-                textAlign: "justify", 
-                marginRight: { sm: 2 },
+                textAlign: "justify", // Ensure text is aligned properly
+                marginRight: { sm: 2 }, // Add some margin between text and image on larger screens
               }}
             >
               Planting trees is one of the best things we can do for the
@@ -731,28 +730,17 @@ function CallusResults({ downloadInputURL, callusID, file, downloadProcessURL })
               best things we can do for the environment. Trees absorb carbon
               dioxide, which is one of the greenhouse gases that contribute to
               climate change. They also release oxygen into the atmosphere. One
-              tree can produce enough oxygen for two people to breathe. Trees absorb carbon
-              dioxide, which is one of the greenhouse gases that contribute to
-              climate change. They also release oxygen into the atmosphere. One
-              tree can produce enough oxygen for two people to breathe. Trees absorb carbon
-              dioxide, which is one of the greenhouse gases that contribute to
-              climate change. They also release oxygen into the atmosphere. One
-              tree can produce enough oxygen for two people to breathe. Trees absorb carbon
-              dioxide, which is one of the greenhouse gases that contribute to
-              climate change. They also release oxygen into the atmosphere. One
-              tree can produce enough oxygen for two people to breathe. Trees absorb carbon
-              dioxide test.
+              tree can produce enough oxygen for two people to breathe.
             </Box>
             <CardMedia
               component="img"
-              image={image1}
+              image={downloadInputURL ? downloadInputURL : image4}
               alt="Predicted"
               sx={{
                 width: { xs: "100%", sm: "50%" },
-                height: 290,
+                height: "auto",
+                maxHeight: 485,
                 alignItems: "center",
-                display: 'flex', 
-                justifyContent: 'center',
                 borderColor: "white",
                 borderWidth: 1,
                 borderStyle: "solid",

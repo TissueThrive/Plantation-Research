@@ -449,6 +449,8 @@ function AbnormalityIdentity() {
 						sx={{
 							backgroundColor: "#FF5F1F",
 							width: { xs: "25%", sm: "12%" },
+							"&:hover": {
+    backgroundColor: "#e5533b"},
 						}}
 						onClick={() => {
 							if (date === null) {
