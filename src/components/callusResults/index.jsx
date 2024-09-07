@@ -18,7 +18,8 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import moment from "moment";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
-import image4 from "../../assets/images/image_icon.jpeg";
+import image4 from "../../assets/images/placeholder.png";
+import image1 from "../../assets/images/back.jpeg";
 import { db } from "../../util/firebaseConfig";
 
 const styleModal = {
@@ -294,7 +295,7 @@ function CallusResults({ downloadInputURL, callusID, file }) {
       }
 
       const imageBlob = await response.blob();
-      const imageObjectURL = URL.createObjectURL(imageBlob);
+      // const imageObjectURL = URL.createObjectURL(imageBlob);
       const xPredictions = response.headers.get("X-Predictions");
 
       if (xPredictions) {
@@ -405,7 +406,7 @@ function CallusResults({ downloadInputURL, callusID, file }) {
           >
             <CardMedia
               component="img"
-              image={downloadInputURL ? downloadInputURL : image4}
+              image={processedShapeImageUrl ? processedShapeImageUrl : image4}
               alt={`Step 01`}
               sx={{
                 width: { xs: "100%", sm: 200 },
@@ -523,7 +524,7 @@ function CallusResults({ downloadInputURL, callusID, file }) {
           >
             <CardMedia
               component="img"
-              image={downloadInputURL ? downloadInputURL : image4}
+              image={processedColorImageUrl ? processedColorImageUrl : image4}
               alt={`Step 02`}
               sx={{
                 width: { xs: "100%", sm: 200 },
@@ -618,7 +619,7 @@ function CallusResults({ downloadInputURL, callusID, file }) {
           >
             <CardMedia
               component="img"
-              image={downloadInputURL ? downloadInputURL : image4}
+              image={processedAreaImageUrl ? processedAreaImageUrl : image4}
               alt={`Step 03`}
               sx={{
                 width: { xs: "100%", sm: 200 },
@@ -708,11 +709,11 @@ function CallusResults({ downloadInputURL, callusID, file }) {
           <Card
             sx={{
               padding: 2,
-
-              flexDirection: { xs: "column", sm: "row" }, // Stack content vertically on small screens
+              flexDirection: "column",
               alignItems: "center",
-              justifyContent: "space-between",
-              gap: 1, // Space between text and image
+              justifyContent: "center",
+              gap: 1,
+              display: "flex",
             }}
           >
             <Box
@@ -722,25 +723,34 @@ function CallusResults({ downloadInputURL, callusID, file }) {
                 marginRight: { sm: 2 }, // Add some margin between text and image on larger screens
               }}
             >
-              Planting trees is one of the best things we can do for the
-              environment. Trees absorb carbon dioxide, which is one of the
+              Planting trees is one of the best things we can do for the best
+              things we can do for the environment. Trees absorb carbon dioxide,
+              which is one of the greenhouse gases that contribute to climate
+              change. They also release oxygen into the atmosphere. One tree can
+              produce enough oxygen for two people to breathe. Trees absorb
+              carbon dioxide, which is one of the greenhouse gases that
+              contribute to climate change. They also release oxygen into the
+              atmosphere. One tree can produce enough oxygen for two people to
+              breathe. Trees absorb carbon dioxide, which is one of the
               greenhouse gases that contribute to climate change. They also
               release oxygen into the atmosphere. One tree can produce enough
-              oxygen for two people to breathe. Planting trees is one of the
-              best things we can do for the environment. Trees absorb carbon
-              dioxide, which is one of the greenhouse gases that contribute to
-              climate change. They also release oxygen into the atmosphere. One
-              tree can produce enough oxygen for two people to breathe.
+              oxygen for two people to breathe. Trees absorb carbon dioxide,
+              which is one of the greenhouse gases that contribute to climate
+              change. They also release oxygen into the atmosphere. One tree can
+              produce enough oxygen for two people to breathe. Trees absorb
+              carbon dioxide test.
             </Box>
             <CardMedia
               component="img"
-              image={downloadInputURL ? downloadInputURL : image4}
+              image={image1}
               alt="Predicted"
               sx={{
                 width: { xs: "100%", sm: "50%" },
-                height: "auto",
+                height: 290,
                 maxHeight: 485,
                 alignItems: "center",
+                display: "flex",
+                justifyContent: "center",
                 borderColor: "white",
                 borderWidth: 1,
                 borderStyle: "solid",
