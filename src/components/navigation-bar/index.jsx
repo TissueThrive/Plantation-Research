@@ -437,10 +437,10 @@ export default function NavigationBar({ navItem }) {
               {currentUser ? (
                 <li>
                   <a
-                    href="#"
-                    onClick={() => handleMenuItemClick("Chat")}
+                    href="/chat"
+                    onClick={() => handleMenuItemClick("chat")}
                     className={`block py-2 px-3 md:p-0 ${
-                      selectedMenuItem === "Chat"
+                      selectedMenuItem === "chat"
                         ? "text-orange border-b-2 border-orange"
                         : "text-gray-900 hover:text-orange"
                     }`}

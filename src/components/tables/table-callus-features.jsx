@@ -19,13 +19,14 @@ import {
   Typography,
   TextField,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { db } from "../../util/firebaseConfig";
 import {
   collection,
   getDocs,
   deleteDoc,
+  addDoc,
   doc,
   updateDoc,
 } from "firebase/firestore";
@@ -34,6 +35,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { toast } from "react-toastify";
 import TableNoData from "../../components/tables/no-data-screen";
+import { useAuth } from "../../context/authContext";
 
 const styleModal = {
   position: "absolute",
@@ -81,7 +83,15 @@ const CallusFeatureTable = () => {
   const [tableDate, setTableDate] = useState(null);
   const [date, setDate] = useState(null);
   const [documents, setDocuments] = useState([]);
+  const [inputMessage, setInputMessage] = useState("");
   const isNotFound = documents.length;
+
+  const { userData } = useAuth();
+  const currentUser = {
+    role: userData.role,
+    name: userData.firstname + " " + userData.lastname,
+    email: userData.email,
+  };
 
   const handleChangePagination = (event, value) => {
     if (typeof value === "number") {
@@ -182,6 +192,33 @@ const CallusFeatureTable = () => {
       toast.success(`Callus record updated successfully`);
     } catch (error) {
       console.error("Error updating document:", error);
+    }
+  };
+
+  const handleSendMessage = async (text, image) => {
+    if (text.trim() || image) {
+      const newMessage = {
+        text: text.trim(),
+        sender: {
+          name: currentUser.name,
+          email: currentUser.email,
+        },
+        createdAt: new Date(),
+        imageUrl: image || "",
+      };
+
+      try {
+        const messagesRef = collection(
+          db,
+          "groups",
+          "VbUV5gYyRWvjnDqZSBGo",
+          "messages"
+        );
+        await addDoc(messagesRef, newMessage);
+        toast.success("Message sent successfully");
+      } catch (error) {
+        console.error("Failed to send message: ", error);
+      }
     }
   };
 
@@ -503,6 +540,9 @@ const CallusFeatureTable = () => {
                           borderRadius: 5,
                           color: "red",
                         }}
+                        onClick={() => {
+                          handleSendMessage(row.callusID, row.original);
+                        }}
                       >
                         Notify{" "}
                       </Button>
@@ -601,7 +641,16 @@ const CallusFeatureTable = () => {
             <CloseIcon />
           </IconButton>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Typography
                 id="modal-modal-title"
                 variant="h6"
@@ -627,13 +676,22 @@ const CallusFeatureTable = () => {
                 src={selectedImages.original}
                 alt="Original"
                 style={{
-                  width: "100%",
-                  height: "auto",
+                  width: "auto",
+                  height: "600px", // Set a fixed pixel size for height
                   borderRadius: 15,
                 }}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Typography
                 id="modal-modal-description"
                 variant="h6"
@@ -659,8 +717,8 @@ const CallusFeatureTable = () => {
                 src={selectedImages.output}
                 alt="Output"
                 style={{
-                  width: "100%",
-                  height: "auto",
+                  width: "auto",
+                  height: "600px", // Set a fixed pixel size for height
                   borderRadius: 15,
                 }}
               />

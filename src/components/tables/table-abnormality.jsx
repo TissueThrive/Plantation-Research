@@ -29,11 +29,13 @@ import {
   getDocs,
   deleteDoc,
   doc,
+  addDoc,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../util/firebaseConfig";
 import { toast } from "react-toastify";
 import TableNoData from "../../components/tables/no-data-screen";
+import { useAuth } from "../../context/authContext";
 
 const styleModal = {
   position: "absolute",
@@ -81,6 +83,13 @@ const ImageTable = () => {
   const isNotFound = documents.length;
   const [tableDate, setTableDate] = useState(null);
   const [date, setDate] = useState(null);
+
+  const { userData } = useAuth();
+  const currentUser = {
+    role: userData.role,
+    name: userData.firstname + " " + userData.lastname,
+    email: userData.email,
+  };
 
   const handleDateChange = async (newValue) => {
     if (!newValue) {
@@ -190,6 +199,33 @@ const ImageTable = () => {
         doc.id === docId ? { ...doc, reason: newReason } : doc
       )
     );
+  };
+
+  const handleSendMessage = async (text, image) => {
+    if (text.trim() || image) {
+      const newMessage = {
+        text: text.trim(),
+        sender: {
+          name: currentUser.name,
+          email: currentUser.email,
+        },
+        createdAt: new Date(),
+        imageUrl: image || "",
+      };
+
+      try {
+        const messagesRef = collection(
+          db,
+          "groups",
+          "VbUV5gYyRWvjnDqZSBGo",
+          "messages"
+        );
+        await addDoc(messagesRef, newMessage);
+        toast.success("Message sent successfully");
+      } catch (error) {
+        console.error("Failed to send message: ", error);
+      }
+    }
   };
 
   return (
@@ -421,6 +457,9 @@ const ImageTable = () => {
                           borderRadius: 5,
                           color: "red",
                         }}
+                        onClick={() => {
+                          handleSendMessage(row.id, row.processedUrl);
+                        }}
                       >
                         Notify{" "}
                       </Button>
@@ -513,7 +552,16 @@ const ImageTable = () => {
             <CloseIcon />
           </IconButton>
           <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Typography
                 id="modal-modal-title"
                 variant="h6"
@@ -539,13 +587,24 @@ const ImageTable = () => {
                 src={selectedImages.original}
                 alt="Original"
                 style={{
-                  width: "100%",
-                  height: "auto",
+                  width: "auto",
+                  height: "600px", // Set a fixed pixel size for height
                   borderRadius: 15,
+                  display: "block",
+                  margin: "0 auto",
                 }}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Typography
                 id="modal-modal-description"
                 variant="h6"
@@ -571,9 +630,11 @@ const ImageTable = () => {
                 src={selectedImages.output}
                 alt="Output"
                 style={{
-                  width: "100%",
-                  height: "auto",
+                  width: "auto",
+                  height: "600px", // Set a fixed pixel size for height
                   borderRadius: 15,
+                  display: "block",
+                  margin: "0 auto",
                 }}
               />
             </Grid>
